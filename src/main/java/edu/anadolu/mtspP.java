@@ -1,9 +1,13 @@
 package edu.anadolu;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import static edu.anadolu.TurkishNetwork.distance;
 
@@ -25,6 +29,8 @@ public class mtspP{
         ArrayList<Integer>[] bestSolution = new ArrayList[ROUTE_NUMBER * HUB_NUMBER];
         ArrayList<Integer>[] rollBack;
         ArrayList<Integer>[] TABLE = new ArrayList[ROUTE_NUMBER * HUB_NUMBER];
+
+        JSONObject jsonObject = new JSONObject();
 
         randomlyGenerate(TABLE);
 
@@ -53,6 +59,8 @@ public class mtspP{
         }
 
         printTable(bestSolution);
+        addToJSON(jsonObject, bestSolution, "firstSolution");
+        addToJSON(jsonObject, bestCost, "firstSolutionCost");
         System.out.println("************************************************************************************************************************************");
         System.out.println("First Solution: " + bestCost);
         System.out.println("************************************************************************************************************************************");
@@ -137,11 +145,20 @@ public class mtspP{
         }
 
         printTable(bestSolution);
+        addToJSON(jsonObject, bestSolution, "bestSolution");
+        addToJSON(jsonObject, bestCost, "bestSolutionCost");
         System.out.println("************************************************************************************************************************************");
         System.out.println("Best Solution: " + bestCost);
         System.out.println("************************************************************************************************************************************");
         printCounters();
 
+        addToJSON(jsonObject, swapNodesInRoute, "swapNodesInRoute");
+        addToJSON(jsonObject, swapHubWithNodeInRoute, "swapHubWithNodeInRoute");
+        addToJSON(jsonObject, swapNodesBetweenRoutes, "swapNodesBetweenRoutes");
+        addToJSON(jsonObject, insertNodeInRoute, "insertNodeInRoute");
+        addToJSON(jsonObject, insertNodeBetweenRoutes, "insertNodeBetweenRoutes");
+
+        writeJSON(jsonObject);
     }
 
     public static void randomlyGenerate(ArrayList<Integer>[] table) {
@@ -449,5 +466,27 @@ public class mtspP{
             }
         }
         return table;
+    }
+
+    public static void addToJSON(JSONObject jsonObject, ArrayList<Integer>[] table, String tableName) {
+        JSONArray routes = new JSONArray();
+
+        for (ArrayList<Integer> i : table) {
+            routes.add(i);
+        }
+
+        jsonObject.put(tableName, routes);
+    }
+
+    public static void addToJSON(JSONObject jsonObject, int value, String valueName) {
+        jsonObject.put(valueName, value);
+    }
+
+    public static void writeJSON(JSONObject jsonObject) {
+        try {
+            Files.write(Paths.get("solutions.json"), jsonObject.toJSONString().getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -53,7 +53,18 @@ public class App {
 
         mTSP mTSP_nn = new mTSP(params.getNumDepots(), params.getNumSalesmen());
 
-        mTSP_nn.nearestNeighbour(params.getInitial());
+        if (isNumeric(params.getInitial())) {
+            mTSP_nn.nearestNeighbour(Integer.parseInt(params.getInitial()));
+        } else {
+
+            for (int i = 0; i < 81; i++) {
+                if (TurkishNetwork.cities[i].equals(params.getInitial().toUpperCase())) {
+                    mTSP_nn.nearestNeighbour(i);
+                    break;
+                }
+            }
+        }
+
         mTSP_nn.print(params.getVerbose());
         System.out.println("Nearest Neighbour **Total cost is " + mTSP_nn.cost());
 
@@ -61,10 +72,15 @@ public class App {
         mTSP_nn.print(params.getVerbose());
         System.out.println("Hill Climbing **Total cost is " + mTSP_nn.cost());
 
+
     }
 
-
-
-
+    public static boolean isNumeric(String str) {
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c)) return false;
+        }
+        return true;
+    }
 
 }
+

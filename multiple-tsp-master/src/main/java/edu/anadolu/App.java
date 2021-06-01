@@ -28,12 +28,8 @@ public class App {
             mTSP mTSP = new mTSP(params.getNumDepots(), params.getNumSalesmen());
 
             mTSP.randomSolution();
-            mTSP.validate();
-            // mTSP.print(false);
 
             final int cost = mTSP.cost();
-
-            // System.out.println("Total cost is " + cost);
 
             if (cost < minCost) {
                 best = mTSP;
@@ -83,4 +79,3 @@ public class App {
     }
 
 }
-

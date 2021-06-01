@@ -12,6 +12,11 @@ public class mTSP {
     ArrayList<Integer>[] table;
     ArrayList<Integer> route = new ArrayList<>();   /* for one route with one depot in nearest neighbour */
     ArrayList<Integer>[] rollBack;        /* table for hill climbing to copy */
+    static int swapNodesInRoute = 0;
+    static int swapHubWithNodeInRoute = 0;
+    static int swapNodesBetweenRoutes = 0;
+    static int insertNodeInRoute = 0;
+    static int insertNodeBetweenRoutes = 0;
 
     public mTSP(int depots, int salesmen) {
 
@@ -112,7 +117,7 @@ public class mTSP {
 
     }
 
-    public void nearestNeighbour( int firstCity) {
+    public void nearestNeighbour(int firstCity) {
 
         /* search nearest city, and add it to route. then search added city, and ... */
         while (true) {
@@ -229,14 +234,6 @@ public class mTSP {
     }
 
     public void hillClimbing() {
-
-        List<Integer> counter = new ArrayList<>();
-        counter.add(0);          // number of swapNodesInRoute
-        counter.add(0);          // number of swapHubWithNodeInRoute
-        counter.add(0);          // number of swapNodesBetweenRoutes
-        counter.add(0);          // number of insertNodeInRoute
-        counter.add(0);          // number of insertNodeBetweenRoutes
-
         int count = 0;
         int newCOST;
         int bestCost = cost(table);
@@ -253,8 +250,7 @@ public class mTSP {
                     swapNodesInRoute(table);
                     newCOST = cost(table);
                     if (newCOST < bestCost) {
-                        int temp = counter.get(0) + 1;
-                        counter.set(0, temp);
+                        swapNodesInRoute++;
                         bestCost = newCOST;
                     } else {
                         table = copyTABLE(rollBack);
@@ -267,8 +263,7 @@ public class mTSP {
                     swapHubWithNodeInRoute(table);
                     newCOST = cost(table);
                     if (newCOST < bestCost) {
-                        int temp = counter.get(1) + 1;
-                        counter.set(1, temp);
+                        swapHubWithNodeInRoute++;
                         bestCost = newCOST;
                     } else {
                         table = copyTABLE(rollBack);
@@ -281,8 +276,7 @@ public class mTSP {
                     swapNodesBetweenRoutes(table);
                     newCOST = cost(table);
                     if (newCOST < bestCost) {
-                        int temp = counter.get(2) + 1;
-                        counter.set(2, temp);
+                        swapNodesBetweenRoutes++;
                         bestCost = newCOST;
                     } else {
                         table = copyTABLE(rollBack);
@@ -295,8 +289,7 @@ public class mTSP {
                     insertNodeInRoute(table);
                     newCOST = cost(table);
                     if (newCOST < bestCost) {
-                        int temp = counter.get(3) + 1;
-                        counter.set(3, temp);
+                        insertNodeInRoute++;
                         bestCost = newCOST;
                     } else {
                         table = copyTABLE(rollBack);
@@ -311,8 +304,7 @@ public class mTSP {
                     insertNodeBetweenRoutes(table);
                     newCOST = cost(table);
                     if (newCOST < bestCost) {
-                        int temp = counter.get(4) + 1;
-                        counter.set(4, temp);
+                        insertNodeBetweenRoutes++;
                         bestCost = newCOST;
 
                     } else {
@@ -324,11 +316,11 @@ public class mTSP {
             count++;
         }
 
-        System.out.println("swapNodesInRoute: " + counter.get(0));
-        System.out.println("swapHubWithNodeInRoute: " + counter.get(1));
-        System.out.println("swapNodesBetweenRoutes: " + counter.get(2));
-        System.out.println("insertNodeInRoute: " + counter.get(3));
-        System.out.println("insertNodeBetweenRoutes: " + counter.get(4));
+        System.out.println("swapNodesInRoute: " + swapNodesInRoute);
+        System.out.println("swapHubWithNodeInRoute: " + swapHubWithNodeInRoute);
+        System.out.println("swapNodesBetweenRoutes: " + swapNodesBetweenRoutes);
+        System.out.println("insertNodeInRoute: " + insertNodeInRoute);
+        System.out.println("insertNodeBetweenRoutes: " + insertNodeBetweenRoutes);
 
     }
 

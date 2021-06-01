@@ -12,6 +12,7 @@ public class mTSP {
     ArrayList<Integer>[] table;
     ArrayList<Integer> route = new ArrayList<>();   /* for one route with one depot in nearest neighbour */
     ArrayList<Integer>[] rollBack;        /* table for hill climbing to copy */
+    
     static int swapNodesInRoute = 0;
     static int swapHubWithNodeInRoute = 0;
     static int swapNodesBetweenRoutes = 0;

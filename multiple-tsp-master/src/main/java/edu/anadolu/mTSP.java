@@ -12,7 +12,7 @@ public class mTSP {
     ArrayList<Integer>[] table;
     ArrayList<Integer> route = new ArrayList<>();   /* for one route with one depot in nearest neighbour */
     ArrayList<Integer>[] rollBack;        /* table for hill climbing to copy */
-    
+
     static int swapNodesInRoute = 0;
     static int swapHubWithNodeInRoute = 0;
     static int swapNodesBetweenRoutes = 0;
@@ -144,23 +144,19 @@ public class mTSP {
 
         }
 
-
         int allRoutes = salesmen * depots;            /* table.size= allRoutes */
         int division = (81 - depots) / allRoutes;     /* number of city in a route. table[i].length = division */
         int remainder = (81 - depots) % allRoutes;    /* number of city in last route is division+remainder */
 
 
         ArrayList<Integer> hubs = new ArrayList<>();   /* depots */
-        hubs.add(route.get(0));     /* first depot */
 
         /* put depots into hub */
         int count = 0;
         while (true) {
 
-            count += division * salesmen;
-
-            hubs.add(route.get(count + 1));
-
+            hubs.add(route.get(count));
+            count += division * salesmen + 1;
 
             if (hubs.size() == depots) {
                 break;
@@ -482,12 +478,6 @@ public class mTSP {
             }
         }
         return table;
-    }
-
-
-    public void validate() {
-
-
     }
 
     public int cost(ArrayList<Integer>[] table) {

@@ -16,6 +16,9 @@ public interface Params {
     @Option(description = "initial city for nearest neighbour", shortName = "i", longName = {"initial", "start"}, defaultValue = "KAYSERİ")
     String getInitial();
 
+    @Option(description = "choice for random or nearest neighbour solution", shortName = "c", longName = "choice")
+    String choose();
+
     @Option(helpRequest = true, description = "display help", shortName = "h")
     boolean getHelp();
 

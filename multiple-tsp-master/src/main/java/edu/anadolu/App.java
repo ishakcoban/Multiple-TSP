@@ -99,7 +99,7 @@ public class App {
 
         long finish = System.currentTimeMillis();
 
-        System.out.println("Time: " + (finish-start));
+        System.out.println("Time: " + (finish-start) + "milliseconds");
 
     }
 

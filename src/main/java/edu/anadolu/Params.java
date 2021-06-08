@@ -13,7 +13,11 @@ public interface Params {
     @Option(description = "use city names when displaying/printing", shortName = "v", longName = "verbose")
     boolean getVerbose();
 
+    @Option(description = "initial city for nearest neighbour", shortName = "i", longName = {"initial", "start"}, defaultValue = "KAYSERİ")
+    String getInitial();
+
     @Option(helpRequest = true, description = "display help", shortName = "h")
     boolean getHelp();
 
 }
+

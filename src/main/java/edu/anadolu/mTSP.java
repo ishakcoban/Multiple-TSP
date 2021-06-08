@@ -150,17 +150,14 @@ public class mTSP {
         int remainder = (81 - depots) % allRoutes;    /* number of city in last route is division+remainder */
 
 
-        ArrayList<Integer> hubs = new ArrayList<>();   /* depots */
-        hubs.add(route.get(0));     /* first depot */
+       ArrayList<Integer> hubs = new ArrayList<>();   /* depots */
 
         /* put depots into hub */
         int count = 0;
         while (true) {
 
-            count += division * salesmen;
-
-            hubs.add(route.get(count + 1));
-
+            hubs.add(route.get(count));
+            count += division * salesmen + 1;
 
             if (hubs.size() == depots) {
                 break;

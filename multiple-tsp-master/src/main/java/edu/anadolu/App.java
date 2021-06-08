@@ -8,6 +8,8 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Date;
+
 import static edu.anadolu.TurkishNetwork.cities;
 
 /**
@@ -16,6 +18,8 @@ import static edu.anadolu.TurkishNetwork.cities;
 public class App {
 
     public static void main(String[] args) throws Exception {
+
+         long start = System.currentTimeMillis();
 
         Params params;
         try {
@@ -93,7 +97,9 @@ public class App {
             throw new Exception("Please choose random or nearest random solution and enter R or NN. ");
         }
 
+        long finish = System.currentTimeMillis();
 
+        System.out.println("Time: " + (finish-start));
 
     }
 

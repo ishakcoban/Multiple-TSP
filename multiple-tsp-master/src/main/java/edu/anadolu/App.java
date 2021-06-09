@@ -5,6 +5,7 @@ import com.lexicalscope.jewel.cli.CliFactory;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,7 +20,7 @@ public class App {
 
     public static void main(String[] args) throws Exception {
 
-         long start = System.currentTimeMillis();
+        long start = System.currentTimeMillis();
 
         Params params;
         try {
@@ -29,15 +30,19 @@ public class App {
             return;
         }
 
-        if(params.choose().equals("r") || params.choose().equals("R")){
+        int limit = params.getNumDepots() * params.getNumSalesmen() + params.getNumDepots();
+        if (limit > 81 || params.getNumDepots() < 0 || params.getNumSalesmen() < 0) {
+            throw new Exception("Invalid input.Depot or Hub number is out of bound!!");
+        }
+
+        if (params.getInitial() < 1 || params.getInitial() > 81) {
+            throw new Exception("The initial city that you choose for nearest neighbour solution is invalid. Please enter an integer value that is between 1-81 ");
+        }
+
+        if (params.choose().equals("r") || params.choose().equals("R")) {
 
             mTSP best = null;
             int minCost = Integer.MAX_VALUE;
-
-            int limit = params.getNumDepots() * params.getNumSalesmen() +  params.getNumDepots();
-            if(limit> 81 || params.getNumDepots() < 0 || params.getNumSalesmen() < 0 ){
-                throw new Exception("Invalid input.Depot or Hub number is out of bound!!");
-            }
 
             for (int i = 0; i < 100_000; i++) {
 
@@ -63,24 +68,13 @@ public class App {
             best.print(params.getVerbose());
             System.out.println("Hill Climbing **Total cost is " + best.cost());
 
-            JsonPart(best,params);
+            JsonPart(best, params);
 
-        }
+        } else if (params.choose().equals("nn") || params.choose().equals("NN")) {
 
-        else if(params.choose().equals("nn") || params.choose().equals("NN")){
             mTSP mTSP_nn = new mTSP(params.getNumDepots(), params.getNumSalesmen());
 
-            if (isNumeric(params.getInitial())) {
-                mTSP_nn.nearestNeighbour(Integer.parseInt(params.getInitial()));
-            } else {
-
-                for (int i = 0; i < 81; i++) {
-                    if (TurkishNetwork.cities[i].equals(params.getInitial().toUpperCase())) {
-                        mTSP_nn.nearestNeighbour(i);
-                        break;
-                    }
-                }
-            }
+            mTSP_nn.nearestNeighbour(params.getInitial() - 1);
 
             mTSP_nn.print(params.getVerbose());
             System.out.println("Nearest Neighbour **Total cost is " + mTSP_nn.cost());
@@ -89,21 +83,19 @@ public class App {
             mTSP_nn.print(params.getVerbose());
             System.out.println("Hill Climbing **Total cost is " + mTSP_nn.cost());
 
-            JsonPart(mTSP_nn,params);
+            JsonPart(mTSP_nn, params);
 
-        }
-
-        else {
+        } else {
             throw new Exception("Please choose random or nearest random solution and enter R or NN. ");
         }
 
         long finish = System.currentTimeMillis();
 
-        System.out.println("Time: " + (finish-start) + "milliseconds");
+        System.out.println("Time: " + (finish - start) + " milliseconds");
 
     }
 
-    public static void JsonPart(mTSP best, Params params){
+    public static void JsonPart(mTSP best, Params params) {
 
         JSONObject mainObject = new JSONObject();
         JSONArray solutions = new JSONArray();
@@ -121,7 +113,7 @@ public class App {
 
             if (routes.size() == params.getNumSalesmen()) {
                 if (params.getVerbose()) solutionsObject.put("depot", cities[best.table[i].get(0)]);
-                else solutionsObject.put("depot",best.table[i].get(0).toString());
+                else solutionsObject.put("depot", best.table[i].get(0).toString());
                 solutionsObject.put("routes", routes);
                 solutions.add(solutionsObject);
                 solutionsObject = new JSONObject();
@@ -136,14 +128,6 @@ public class App {
             e.printStackTrace();
         }
 
-    }
-
-
-    public static boolean isNumeric(String str) {
-        for (char c : str.toCharArray()) {
-            if (!Character.isDigit(c)) return false;
-        }
-        return true;
     }
 
 }
